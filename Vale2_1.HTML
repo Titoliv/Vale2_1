@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gioco dei Cuori</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #f8f8f8;
+        }
+        .heart {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-image: url('vali2.jpg');
+            background-size: cover;
+            animation: heartbeat 1s infinite alternate;
+            cursor: pointer;
+        }
+        @keyframes heartbeat {
+            from { transform: scale(1); }
+            to { transform: scale(1.2); }
+        }
+        @keyframes explode {
+            0% { transform: scale(1); }
+            100% { transform: scale(0); opacity: 0; }
+        }
+        #score {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div id="score">Punteggio: 0</div>
+    <script>
+        let score = 0;
+
+        function updateScore() {
+            document.getElementById('score').innerText = 'Punteggio: ' + score;
+        }
+
+        function explodeHeart(event) {
+            const heart = event.target;
+            score += 10;
+            updateScore();
+            heart.style.animation = 'explode 0.5s forwards';
+            setTimeout(() => {
+                heart.remove();
+            }, 500);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+            heart.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+            heart.addEventListener('click', explodeHeart);
+            document.body.appendChild(heart);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const numHearts = 15; // Numero di cuori da generare
+            for (let i = 0; i < numHearts; i++) {
+                createHeart();
+            }
+            setInterval(createHeart, 1000); // Aggiunge un nuovo cuore ogni secondo
+        });
+    </script>
+</body>
+</html>
